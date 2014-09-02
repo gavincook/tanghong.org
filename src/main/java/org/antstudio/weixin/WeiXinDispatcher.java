@@ -1,10 +1,8 @@
 package org.antstudio.weixin;
 
 
-import org.antstudio.weixin.message.Message;
-import org.antstudio.weixin.message.MessageFactory;
-import org.antstudio.weixin.message.MsgType;
-import org.antstudio.weixin.message.TextMessage;
+import org.antstudio.weixin.message.*;
+import org.antstudio.weixin.message.response.ImageResponseMessage;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +45,16 @@ public class WeiXinDispatcher {
                 rtm.setContent(tm.getContent());
                 rtm.setMsgType(MsgType.TEXT);
                 return rtm.toXml();
+            }else if(message instanceof ImageMessage){
+                ImageMessage im = (ImageMessage)message;
+
+                ImageResponseMessage irm = new ImageResponseMessage();
+                irm.setMediaId(im.getMediaId());
+                irm.setFromUserName(im.getToUserName());
+                irm.setToUserName(im.getFromUserName());
+                irm.setMsgType(MsgType.IMAGE);
+                irm.setCreateTime(new Date());
+                return irm.toXml();
             }
             return "";
         }
