@@ -19,7 +19,8 @@ public class MessageFactory {
             MSGTYPE = "MsgType",
             MSGID = "MsgId",
             PICURL = "PicUrl",
-            MEDIAID = "MediaId";
+            MEDIAID = "MediaId",
+            EVENT = "Event";
 
     private static MessageFactory messageFactory = new MessageFactory();
 
@@ -34,6 +35,7 @@ public class MessageFactory {
         switch(msgType){
             case TEXT : return toTextMessage(map);
             case IMAGE: return toImageMessage(map);
+            case EVENT: return toBaseEventMessage(map);
         }
         return null;
     }
@@ -60,6 +62,16 @@ public class MessageFactory {
         im.setFromUserName(map.get(FROMUSERNAME));
         im.setToUserName(map.get(TOUSERNAME));
         return im;
+    }
+
+    public BaseEvent toBaseEventMessage(Map<String,String> map){
+        BaseEvent event = new BaseEvent();
+        event.setCreateTime(parseDate(map.get(CREATETIME)));
+        event.setMsgType(MsgType.TEXT);
+        event.setFromUserName(map.get(FROMUSERNAME));
+        event.setToUserName(map.get(TOUSERNAME));
+        event.setEvent(map.get(EVENT));
+        return event;
     }
 
     private Date parseDate(String dateString){

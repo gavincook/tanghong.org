@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.InputSource;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
@@ -55,6 +54,19 @@ public class WeiXinDispatcher {
                 irm.setMsgType(MsgType.IMAGE);
                 irm.setCreateTime(new Date());
                 return irm.toXml();
+            } else if(message instanceof BaseEvent){
+                BaseEvent event = (BaseEvent)message;
+                switch (event.getEvent()){
+                    case "subscribe":
+                        TextMessage rtm = new TextMessage();
+                        rtm.setFromUserName(event.getToUserName());
+                        rtm.setToUserName(event.getFromUserName());
+                        rtm.setCreateTime(new Date());
+                        rtm.setContent("终于,你还是关注了我,对于此我只能说\"~干的漂亮~\"");
+                        rtm.setMsgType(MsgType.TEXT);
+                        return rtm.toXml();
+                    case "unsubscribe":return "";
+                }
             }
             return "";
         }
