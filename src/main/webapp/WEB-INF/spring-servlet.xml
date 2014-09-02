@@ -16,7 +16,17 @@
 	        <bean class="org.moon.support.spring.FormMethodArgumentResolver"/>
 	         <bean class="org.moon.support.spring.WebUserArgumentResolver"/>
 	    </mvc:argument-resolvers>
-	</mvc:annotation-driven>  
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 	<!-- 
 	    mvc:annotation-driven 
 	      3.2 之前              相当于注册了DefaultAnnotationHandlerMapping 和 AnnotationMethodHandlerAdapter两个bean 
@@ -52,6 +62,7 @@
 	   <property name="frozen" value="true"></property>
 	</bean> 
 <context:component-scan base-package="com.reeham" />
+    <context:component-scan base-package="org.antstudio" />
 <context:component-scan base-package="org.moon" use-default-filters="true" >
 <context:include-filter type="custom" expression="org.moon.support.spring.DomainTypeFilter"/>
 </context:component-scan>
