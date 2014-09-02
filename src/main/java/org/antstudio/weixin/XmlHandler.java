@@ -9,6 +9,8 @@ import java.util.Map;
 
 /**
  * 用于解析xml
+ * @author Gavin
+ * @date 9/2/2014
  */
 public class XmlHandler extends DefaultHandler {
 

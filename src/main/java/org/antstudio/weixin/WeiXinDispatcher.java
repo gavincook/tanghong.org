@@ -20,7 +20,9 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Created by Gavin on 9/1/2014.
+ * 微信消息处理控制器
+ * @author Gavin
+ * @date 9/2/2014
  */
 @Controller
 public class WeiXinDispatcher {
@@ -29,19 +31,14 @@ public class WeiXinDispatcher {
 
     @RequestMapping("/weixin")
     @ResponseBody
-    public String dispatch(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        Map m = request.getParameterMap();
-
+    public String dispatch(HttpServletRequest request) {
         if(request.getMethod().equalsIgnoreCase("get")){
-            return request.getParameter("echostr");
+            return request.getParameter("echostr");//原样返回echostr
         }else{
             Message message = getContentFromRequest(request);
 
             if(message instanceof TextMessage){
                 TextMessage tm = (TextMessage)message;
-
                 TextMessage rtm = new TextMessage();
                 rtm.setMsgId(tm.getMsgId());
                 rtm.setFromUserName(tm.getToUserName());

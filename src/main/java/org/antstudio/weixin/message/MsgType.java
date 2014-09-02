@@ -2,7 +2,8 @@ package org.antstudio.weixin.message;
 
 /**
  * 消息类型
- * Created by Gavin on 9/2/2014.
+ * @author Gavin
+ * @date 9/2/2014
  */
 public enum MsgType {
     TEXT("text"),//文本消息

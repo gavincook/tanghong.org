@@ -4,7 +4,9 @@ package org.antstudio.weixin.message;
 import org.antstudio.weixin.annotation.CDATAIgnore;
 
 /**
- * Created by Gavin on 9/2/2014.
+ * 文本消息
+ * @author Gavin
+ * @date 9/2/2014
  */
 public class TextMessage extends BaseMessage {
 

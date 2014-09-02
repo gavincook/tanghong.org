@@ -7,7 +7,8 @@ import java.util.Map;
 
 /**
  * 用于构造消息对象的工厂
- * Created by Gavin on 9/2/2014.
+ * @author Gavin
+ * @date 9/2/2014
  */
 public class MessageFactory {
 

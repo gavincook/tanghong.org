@@ -9,7 +9,8 @@ import java.util.Date;
 
 /**
  * 微信消息
- * Created by Gavin on 9/2/2014.
+ * @author Gavin
+ * @date 9/2/2014
  */
 public abstract class BaseMessage implements Message{
 
