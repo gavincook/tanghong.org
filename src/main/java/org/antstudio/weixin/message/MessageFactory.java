@@ -20,7 +20,11 @@ public class MessageFactory {
             MSGID = "MsgId",
             PICURL = "PicUrl",
             MEDIAID = "MediaId",
-            EVENT = "Event";
+            EVENT = "Event",
+            LOCATION_X = "Location_X",
+            LOCATION_Y = "Location_Y",
+            LABEL = "Label",
+            SCALE = "Scale";
 
     private static MessageFactory messageFactory = new MessageFactory();
 
@@ -30,17 +34,28 @@ public class MessageFactory {
         return messageFactory;
     }
 
+    /**
+     * 从参数map中获取消息对象
+     * @param map
+     * @return
+     */
     public  Message getMessage(Map<String,String> map){
         MsgType msgType = MsgType.valueOf(map.get(MSGTYPE).toUpperCase());
         switch(msgType){
             case TEXT : return toTextMessage(map);
             case IMAGE: return toImageMessage(map);
             case EVENT: return toBaseEventMessage(map);
+            case LOCATION:return toLocationMessage(map);
         }
         return null;
     }
 
 
+    /**
+     * 获取文本消息
+     * @param map
+     * @return
+     */
     public TextMessage toTextMessage(Map<String,String> map){
         TextMessage tm = new TextMessage();
         tm.setContent(map.get(CONTENT));
@@ -52,6 +67,11 @@ public class MessageFactory {
         return tm;
     }
 
+    /**
+     * 获取图片消息
+     * @param map
+     * @return
+     */
     public ImageMessage toImageMessage(Map<String,String> map){
         ImageMessage im = new ImageMessage();
         im.setPicUrl(map.get(PICURL));
@@ -64,6 +84,11 @@ public class MessageFactory {
         return im;
     }
 
+    /**
+     * 获取基础事件消息(订阅和取消订阅)
+     * @param map
+     * @return
+     */
     public BaseEvent toBaseEventMessage(Map<String,String> map){
         BaseEvent event = new BaseEvent();
         event.setCreateTime(parseDate(map.get(CREATETIME)));
@@ -72,6 +97,25 @@ public class MessageFactory {
         event.setToUserName(map.get(TOUSERNAME));
         event.setEvent(map.get(EVENT));
         return event;
+    }
+
+    /**
+     * 位置信息消息
+     * @param map
+     * @return
+     */
+    public LocationMessage toLocationMessage(Map<String,String> map){
+        LocationMessage lm = new LocationMessage();
+        lm.setCreateTime(parseDate(map.get(CREATETIME)));
+        lm.setMsgType(MsgType.LOCATION);
+        lm.setFromUserName(map.get(FROMUSERNAME));
+        lm.setToUserName(map.get(TOUSERNAME));
+        lm.setMsgId(MSGID);
+        lm.setLocation_X(map.get(LOCATION_X));
+        lm.setLocation_Y(map.get(LOCATION_Y));
+        lm.setLabel(map.get(LABEL));
+        lm.setScale(map.get(SCALE));
+        return lm;
     }
 
     private Date parseDate(String dateString){

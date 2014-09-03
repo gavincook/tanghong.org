@@ -65,8 +65,19 @@ public class WeiXinDispatcher {
                         rtm.setContent("终于,你还是关注了我,对于此我只能说\"~干的漂亮~\"");
                         rtm.setMsgType(MsgType.TEXT);
                         return rtm.toXml();
-                    case "unsubscribe":return "";
+                    case "unsubscribe":return "";//取消订阅事件，不处理
                 }
+            } else if(message instanceof LocationMessage){
+                LocationMessage lm = (LocationMessage)message;
+                TextMessage rtm = new TextMessage();
+                rtm.setMsgId(lm.getMsgId());
+                rtm.setFromUserName(lm.getToUserName());
+                rtm.setToUserName(lm.getFromUserName());
+                rtm.setCreateTime(new Date());
+                rtm.setContent("让我来猜猜你的位置：\n 你当前在" + lm.getLabel() + "\n 经度："
+                        + lm.getLocation_Y() + "\n 纬度：" + lm.getLocation_X() + "\n地图缩放大小：" + lm.getScale());
+                rtm.setMsgType(MsgType.TEXT);
+                return rtm.toXml();
             }
             return "";
         }
@@ -93,6 +104,7 @@ public class WeiXinDispatcher {
             logger.debug("----------接收到的参数-----------------------");
 
             Message message = MessageFactory.newInstance().getMessage(xmlHandler.getValuesMap());
+            logger.debug("当前消息类型为：{}",message.getClass());
             return message;
         }catch (Exception e){
             throw new IllegalStateException(e.getCause());
