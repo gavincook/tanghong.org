@@ -12,19 +12,23 @@ import java.util.Map;
  */
 public class MessageFactory {
 
-    private static String CONTENT = "Content",
-            TOUSERNAME = "ToUserName",
+    private static String
+                 CONTENT = "Content",
+              TOUSERNAME = "ToUserName",
             FROMUSERNAME = "FromUserName",
-            CREATETIME = "CreateTime",
-            MSGTYPE = "MsgType",
-            MSGID = "MsgId",
-            PICURL = "PicUrl",
-            MEDIAID = "MediaId",
-            EVENT = "Event",
-            LOCATION_X = "Location_X",
-            LOCATION_Y = "Location_Y",
-            LABEL = "Label",
-            SCALE = "Scale";
+              CREATETIME = "CreateTime",
+                 MSGTYPE = "MsgType",
+                   MSGID = "MsgId",
+                  PICURL = "PicUrl",
+                 MEDIAID = "MediaId",
+                   EVENT = "Event",
+              LOCATION_X = "Location_X",
+              LOCATION_Y = "Location_Y",
+                   LABEL = "Label",
+                   SCALE = "Scale",
+             DESCRIPTION = "Description",
+                     URL = "Url",
+                   TITLE = "Title";
 
     private static MessageFactory messageFactory = new MessageFactory();
 
@@ -42,10 +46,11 @@ public class MessageFactory {
     public  Message getMessage(Map<String,String> map){
         MsgType msgType = MsgType.valueOf(map.get(MSGTYPE).toUpperCase());
         switch(msgType){
-            case TEXT : return toTextMessage(map);
-            case IMAGE: return toImageMessage(map);
-            case EVENT: return toBaseEventMessage(map);
-            case LOCATION:return toLocationMessage(map);
+            case TEXT    : return toTextMessage(map);
+            case IMAGE   : return toImageMessage(map);
+            case EVENT   : return toBaseEventMessage(map);
+            case LOCATION: return toLocationMessage(map);
+            case LINK    : return toLinkMessage(map);
         }
         return null;
     }
@@ -118,6 +123,29 @@ public class MessageFactory {
         return lm;
     }
 
+    /**
+     * 链接消息
+     * @param map
+     * @return
+     */
+    public LinkMessage toLinkMessage(Map<String,String> map){
+        LinkMessage lm = new LinkMessage();
+        lm.setCreateTime(parseDate(map.get(CREATETIME)));
+        lm.setMsgType(MsgType.LOCATION);
+        lm.setFromUserName(map.get(FROMUSERNAME));
+        lm.setToUserName(map.get(TOUSERNAME));
+        lm.setMsgId(MSGID);
+        lm.setDescription(map.get(DESCRIPTION));
+        lm.setTitle(map.get(TITLE));
+        lm.setUrl(map.get(URL));
+        return lm;
+    }
+
+    /**
+     * 日期转换
+     * @param dateString
+     * @return
+     */
     private Date parseDate(String dateString){
         return new Date(Long.parseLong(dateString));
     }

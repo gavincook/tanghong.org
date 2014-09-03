@@ -78,6 +78,18 @@ public class WeiXinDispatcher {
                         + lm.getLocation_Y() + "\n 纬度：" + lm.getLocation_X() + "\n地图缩放大小：" + lm.getScale());
                 rtm.setMsgType(MsgType.TEXT);
                 return rtm.toXml();
+            } else if(message instanceof LinkMessage){
+                LinkMessage lm = (LinkMessage) message;
+                TextMessage rtm = new TextMessage();
+                rtm.setMsgId(lm.getMsgId());
+                rtm.setFromUserName(lm.getToUserName());
+                rtm.setToUserName(lm.getFromUserName());
+                rtm.setCreateTime(new Date());
+                rtm.setContent("标题："+lm.getTitle()
+                              +"\n描述："+lm.getDescription()
+                              +"\n地址："+lm.getUrl());
+                rtm.setMsgType(MsgType.TEXT);
+                return rtm.toXml();
             }
             return "";
         }
