@@ -12,7 +12,8 @@ public enum MsgType {
     VIDEO("video"),//视频消息
     LOCATION("location"),//地理位置消息
     LINK("link"),//链接消息
-    EVENT("event");//事件消息
+    EVENT("event"),//事件消息
+    MUSIC("music");//音乐消息
 
     private String value;
 

@@ -90,14 +90,14 @@ public abstract class BaseMessage implements Message{
         return sb.toString();
     }
 
-    private String wrapName(String name,boolean end){
+    protected String wrapName(String name,boolean end){
         if(end){
             return "</"+name+">";
         }
         return "<"+name+">";
     }
 
-    private String wrapValue(String value){
+    protected String wrapValue(String value){
         if(StringUtils.isEmpty(value)){
             return "";
         } else {

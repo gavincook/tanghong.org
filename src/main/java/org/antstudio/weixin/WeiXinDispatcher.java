@@ -3,12 +3,15 @@ package org.antstudio.weixin;
 
 import org.antstudio.weixin.message.*;
 import org.antstudio.weixin.message.response.ImageResponseMessage;
+import org.antstudio.weixin.message.response.MusicMessage;
+import org.antstudio.weixin.service.MusicService;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xml.sax.InputSource;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -26,6 +29,9 @@ public class WeiXinDispatcher {
 
     private Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
 
+    @Resource
+    private MusicService musicService;
+
     @RequestMapping("/weixin")
     @ResponseBody
     public String dispatch(HttpServletRequest request) {
@@ -36,6 +42,23 @@ public class WeiXinDispatcher {
 
             if(message instanceof TextMessage){
                 TextMessage tm = (TextMessage)message;
+                if(tm.getContent().startsWith(",")||tm.getContent().startsWith("，")||tm.getContent().startsWith("歌曲")){
+                    MusicMessage musicMessage = musicService.getMusicMessage(tm);
+                    if(musicMessage != null){
+                        return musicMessage.toXml();
+                    }else{
+                        TextMessage rtm = new TextMessage();
+                        rtm.setMsgId(tm.getMsgId());
+                        rtm.setFromUserName(tm.getToUserName());
+                        rtm.setToUserName(tm.getFromUserName());
+                        rtm.setCreateTime(new Date());
+                        rtm.setContent("抱歉，没有找到 \"" + tm.getContent() + "\" 相关的歌曲");
+                        rtm.setMsgType(MsgType.TEXT);
+                        return rtm.toXml();
+                    }
+                }
+
+
                 TextMessage rtm = new TextMessage();
                 rtm.setMsgId(tm.getMsgId());
                 rtm.setFromUserName(tm.getToUserName());
@@ -85,9 +108,9 @@ public class WeiXinDispatcher {
                 rtm.setFromUserName(lm.getToUserName());
                 rtm.setToUserName(lm.getFromUserName());
                 rtm.setCreateTime(new Date());
-                rtm.setContent("标题："+lm.getTitle()
-                              +"\n描述："+lm.getDescription()
-                              +"\n地址："+lm.getUrl());
+                rtm.setContent("标题：" + lm.getTitle()
+                        + "\n描述：" + lm.getDescription()
+                        + "\n地址：" + lm.getUrl());
                 rtm.setMsgType(MsgType.TEXT);
                 return rtm.toXml();
             }
