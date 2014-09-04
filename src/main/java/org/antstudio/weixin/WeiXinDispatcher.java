@@ -56,6 +56,15 @@ public class WeiXinDispatcher {
                         rtm.setMsgType(MsgType.TEXT);
                         return rtm.toXml();
                     }
+                }else if(tm.getContent().equals("抽奖")||tm.getContent().equals("cj")){
+                    TextMessage rtm = new TextMessage();
+                    rtm.setMsgId(tm.getMsgId());
+                    rtm.setFromUserName(tm.getToUserName());
+                    rtm.setToUserName(tm.getFromUserName());
+                    rtm.setCreateTime(new Date());
+                    rtm.setContent("http://182.92.66.129/weixin/bigTurnplate");
+                    rtm.setMsgType(MsgType.TEXT);
+                    return rtm.toXml();
                 }
 
 
